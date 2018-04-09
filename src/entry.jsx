@@ -1,15 +1,17 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Route, HashRouter } from 'react-router-dom';
-import configureStore from './store';
 import { Provider } from 'react-redux';
+import './index.css';
+import configureStore from './store';
+import SearchBar from './components/search_bar';
 
 const store = configureStore();
 
 const App = () => {
   return (
     <div>
-      hello
+      <SearchBar />
     </div>
   );
 };

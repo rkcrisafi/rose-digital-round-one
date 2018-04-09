@@ -3221,11 +3221,17 @@ var _reactDom = __webpack_require__(48);
 
 var _reactRouterDom = __webpack_require__(57);
 
+var _reactRedux = __webpack_require__(103);
+
+__webpack_require__(118);
+
 var _store = __webpack_require__(85);
 
 var _store2 = _interopRequireDefault(_store);
 
-var _reactRedux = __webpack_require__(103);
+var _search_bar = __webpack_require__(113);
+
+var _search_bar2 = _interopRequireDefault(_search_bar);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3235,7 +3241,7 @@ var App = function App() {
   return _react2.default.createElement(
     'div',
     null,
-    'hello'
+    _react2.default.createElement(_search_bar2.default, null)
   );
 };
 
@@ -26082,10 +26088,14 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(21);
 
-// import AlbumReducer from './album_reducer';
+var _album_reducer = __webpack_require__(114);
+
+var _album_reducer2 = _interopRequireDefault(_album_reducer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = (0, _redux.combineReducers)({
-  albums: {}
+  albums: _album_reducer2.default
 });
 
 /***/ }),
@@ -26729,6 +26739,242 @@ function verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, dis
   verify(mapDispatchToProps, 'mapDispatchToProps', displayName);
   verify(mergeProps, 'mergeProps', displayName);
 }
+
+/***/ }),
+/* 113 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(103);
+
+var _actions = __webpack_require__(115);
+
+var _album_item = __webpack_require__(117);
+
+var _album_item2 = _interopRequireDefault(_album_item);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SearchBar = function (_React$Component) {
+  _inherits(SearchBar, _React$Component);
+
+  function SearchBar() {
+    _classCallCheck(this, SearchBar);
+
+    return _possibleConstructorReturn(this, (SearchBar.__proto__ || Object.getPrototypeOf(SearchBar)).apply(this, arguments));
+  }
+
+  _createClass(SearchBar, [{
+    key: 'handleSubmit',
+    value: function handleSubmit(e) {
+      e.preventDefault();
+      var query = this.input.value.split(' ').join('+');
+      this.props.fetchAlbums(query);
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      return _react2.default.createElement(
+        'div',
+        { className: 'search-bar-container' },
+        _react2.default.createElement(
+          'form',
+          {
+            onSubmit: function onSubmit(e) {
+              return _this2.handleSubmit(e);
+            },
+            className: 'search-bar-form' },
+          _react2.default.createElement('input', { type: 'text', ref: function ref(input) {
+              return _this2.input = input;
+            } })
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'searched-albums-container' },
+          this.props.albums.map(function (album, idx) {
+            return _react2.default.createElement(_album_item2.default, { key: idx, album: album });
+          })
+        )
+      );
+    }
+  }]);
+
+  return SearchBar;
+}(_react2.default.Component);
+
+var mapStateToProps = function mapStateToProps(state) {
+  var albums = !state.albums.results ? [] : Object.keys(state.albums.results).map(function (id) {
+    return state.albums.results[id];
+  });
+  return {
+    albums: albums
+  };
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchAlbums: _actions.fetchAlbums })(SearchBar);
+
+/***/ }),
+/* 114 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _actions = __webpack_require__(115);
+
+var AlbumReducer = function AlbumReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments[1];
+
+  switch (action.type) {
+    case _actions.FETCH_ALBUMS:
+      return action.albums;
+    default:
+      return state;
+  }
+};
+
+exports.default = AlbumReducer;
+
+/***/ }),
+/* 115 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.fetchAlbums = exports.FETCH_ALBUMS = undefined;
+
+var _APIUtil = __webpack_require__(116);
+
+var iTunesAPI = _interopRequireWildcard(_APIUtil);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+var FETCH_ALBUMS = exports.FETCH_ALBUMS = 'FETCH_ALBUMS';
+
+var receiveAlbums = function receiveAlbums(albums) {
+  return {
+    type: FETCH_ALBUMS,
+    albums: albums
+  };
+};
+
+var fetchAlbums = exports.fetchAlbums = function fetchAlbums(query) {
+  return function (dispatch) {
+    return iTunesAPI.fetchAlbums(query).then(function (albums) {
+      return dispatch(receiveAlbums(albums));
+    });
+  };
+};
+
+/***/ }),
+/* 116 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var fetchAlbums = exports.fetchAlbums = function fetchAlbums(query) {
+  return fetch("https://itunes.apple.com/search?term=" + query + "&limit=3&entity=album").then(function (res) {
+    return res.json();
+  });
+};
+
+/***/ }),
+/* 117 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var AlbumItem = function AlbumItem(_ref) {
+  var album = _ref.album;
+
+  var covUrl = album.artworkUrl100.split('100').join('300');
+  return _react2.default.createElement(
+    'div',
+    { className: 'search-album' },
+    _react2.default.createElement(
+      'div',
+      { className: 'search-album-cover' },
+      _react2.default.createElement('img', { src: covUrl })
+    ),
+    _react2.default.createElement(
+      'div',
+      { className: 'search-album-info' },
+      _react2.default.createElement(
+        'div',
+        { className: 'album-info-line' },
+        'Album:',
+        ' ',
+        album.collectionName
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'album-info-line' },
+        'Artist:',
+        ' ',
+        album.artistName
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'album-info-line' },
+        'Year:',
+        ' ',
+        album.releaseDate.slice(0, 4)
+      )
+    )
+  );
+};
+
+exports.default = AlbumItem;
+
+/***/ }),
+/* 118 */
+/***/ (function(module, exports) {
+
+throw new Error("Module parse failed: Unexpected token (1:5)\nYou may need an appropriate loader to handle this file type.\n| body {\n|   margin: 0;\n|   padding: 0;");
 
 /***/ })
 /******/ ]);
