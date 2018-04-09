@@ -11,6 +11,7 @@ body {
 
 :root {
   --padding: 10px;
+  --padding2: 20px;
 }
 .search-bar-form input {
   padding-left: var(--padding);
@@ -30,9 +31,18 @@ body {
   justify-content: center;
 }
 
+
+
+@media screen and (max-width: 48em) {
+  .search-bar-container {
+    width: calc(100% - 2*var(--padding2));
+    padding: 0 20px;
+  }
+}
+
 .searched-album {
   display: grid;
-  grid-template-columns: 3fr 4fr;
+  grid-template-columns: 3fr 4fr 1fr;
   padding: 10px;
 }
 
@@ -48,4 +58,15 @@ body {
   font-weight: 700;
   color: #777;
   margin-top: 10px;
+}
+
+.add-album-icon {
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  color: #777;
+}
+
+.fa-plus-circle {
+  cursor: pointer;
 }

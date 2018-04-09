@@ -12,6 +12,7 @@ const AlbumItem = ({ album }) => {
         <div className="album-info-line">Artist:{' '}{album.artistName}</div>
         <div className="album-info-line">Year:{' '}{album.releaseDate.slice(0,4)}</div>
       </div>
+      <div className="add-album-icon"><i className="fas fa-plus-circle"></i></div>
     </div>
   );
 };

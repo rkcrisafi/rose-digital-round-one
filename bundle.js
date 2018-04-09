@@ -26965,6 +26965,11 @@ var AlbumItem = function AlbumItem(_ref) {
         ' ',
         album.releaseDate.slice(0, 4)
       )
+    ),
+    _react2.default.createElement(
+      'div',
+      { className: 'add-album-icon' },
+      _react2.default.createElement('i', { className: 'fas fa-plus-circle' })
     )
   );
 };
