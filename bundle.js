@@ -3223,8 +3223,6 @@ var _reactRouterDom = __webpack_require__(57);
 
 var _reactRedux = __webpack_require__(103);
 
-__webpack_require__(118);
-
 var _store = __webpack_require__(85);
 
 var _store2 = _interopRequireDefault(_store);
@@ -26804,9 +26802,12 @@ var SearchBar = function (_React$Component) {
               return _this2.handleSubmit(e);
             },
             className: 'search-bar-form' },
-          _react2.default.createElement('input', { type: 'text', ref: function ref(input) {
+          _react2.default.createElement('input', {
+            type: 'text',
+            ref: function ref(input) {
               return _this2.input = input;
-            } })
+            },
+            placeholder: 'Search...' })
         ),
         _react2.default.createElement(
           'div',
@@ -26934,15 +26935,15 @@ var AlbumItem = function AlbumItem(_ref) {
   var covUrl = album.artworkUrl100.split('100').join('300');
   return _react2.default.createElement(
     'div',
-    { className: 'search-album' },
+    { className: 'searched-album' },
     _react2.default.createElement(
       'div',
-      { className: 'search-album-cover' },
+      { className: 'searched-album-cover' },
       _react2.default.createElement('img', { src: covUrl })
     ),
     _react2.default.createElement(
       'div',
-      { className: 'search-album-info' },
+      { className: 'searched-album-info' },
       _react2.default.createElement(
         'div',
         { className: 'album-info-line' },
@@ -26969,12 +26970,6 @@ var AlbumItem = function AlbumItem(_ref) {
 };
 
 exports.default = AlbumItem;
-
-/***/ }),
-/* 118 */
-/***/ (function(module, exports) {
-
-throw new Error("Module parse failed: Unexpected token (1:5)\nYou may need an appropriate loader to handle this file type.\n| body {\n|   margin: 0;\n|   padding: 0;");
 
 /***/ })
 /******/ ]);

@@ -1,5 +1,51 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: helvetica;
+}
+
+.search-bar-container {
+  width: 50%;
+  margin: auto;
+}
+
+:root {
+  --padding: 10px;
+}
+.search-bar-form input {
+  padding-left: var(--padding);
+  height: 40px;
+  margin: 20px 0;
+  width: calc(100% - var(--padding));
+  border: 1px solid #dadada;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.searched-albums-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.searched-album {
+  display: grid;
+  grid-template-columns: 3fr 4fr;
+  padding: 10px;
+}
+
+.searched-album-cover img{
+  width: 100%;
+}
+
+.searched-album-info {
+  margin-left: 10px;
+}
+
+.album-info-line {
+  font-weight: 700;
+  color: #777;
+  margin-top: 10px;
 }

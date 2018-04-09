@@ -17,7 +17,10 @@ class SearchBar extends React.Component {
         <form
           onSubmit={(e) => this.handleSubmit(e)}
           className="search-bar-form">
-          <input type="text" ref={input => this.input = input}/>
+          <input
+            type="text"
+            ref={input => this.input = input}
+            placeholder="Search..."/>
         </form>
 
         <div className="searched-albums-container">
