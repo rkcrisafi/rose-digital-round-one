@@ -26099,11 +26099,16 @@ var _user_album_reducer = __webpack_require__(219);
 
 var _user_album_reducer2 = _interopRequireDefault(_user_album_reducer);
 
+var _search_bar_state_reducer = __webpack_require__(222);
+
+var _search_bar_state_reducer2 = _interopRequireDefault(_search_bar_state_reducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = (0, _redux.combineReducers)({
   albums: _album_reducer2.default,
-  userAlbums: _user_album_reducer2.default
+  userAlbums: _user_album_reducer2.default,
+  showAlbumSearch: _search_bar_state_reducer2.default
 });
 
 /***/ }),
@@ -26799,10 +26804,9 @@ var SearchBar = function (_React$Component) {
     }
   }, {
     key: 'handleClick',
-    value: function handleClick() {}
-  }, {
-    key: 'handlePlusClick',
-    value: function handlePlusClick() {}
+    value: function handleClick() {
+      this.props.changeAlbumSearchState(!this.props.showAlbumSearch);
+    }
   }, {
     key: 'render',
     value: function render() {
@@ -26823,7 +26827,7 @@ var SearchBar = function (_React$Component) {
             'div',
             {
               onClick: function onClick() {
-                return _this2.handlePlusClick();
+                return _this2.handleClick();
               },
               className: 'show-search-albums-button' },
             _react2.default.createElement('i', { className: 'fas fa-plus-circle' })
@@ -26831,7 +26835,7 @@ var SearchBar = function (_React$Component) {
         ),
         _react2.default.createElement(
           'div',
-          { className: 'search-bar-container' },
+          { className: 'search-bar-container ' + (!this.props.showAlbumSearch ? "hide-search-bar" : "") },
           _react2.default.createElement(
             'form',
             {
@@ -26879,13 +26883,15 @@ var mapStateToProps = function mapStateToProps(state) {
     return state.albums.results[id];
   });
   var userAlbums = state.userAlbums;
+  var showAlbumSearch = state.showAlbumSearch;
   return {
     albums: albums,
-    userAlbums: userAlbums
+    userAlbums: userAlbums,
+    showAlbumSearch: showAlbumSearch
   };
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchAlbums: _actions.fetchAlbums, addAlbum: _actions.addAlbum })(SearchBar);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchAlbums: _actions.fetchAlbums, addAlbum: _actions.addAlbum, changeAlbumSearchState: _actions.changeAlbumSearchState })(SearchBar);
 
 /***/ }),
 /* 114 */
@@ -26924,7 +26930,7 @@ exports.default = AlbumReducer;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchAlbums = exports.addAlbum = exports.ADD_ALBUM = exports.FETCH_ALBUMS = undefined;
+exports.fetchAlbums = exports.changeAlbumSearchState = exports.addAlbum = exports.SHOW_ALBUM_SEARCH_BAR = exports.ADD_ALBUM = exports.FETCH_ALBUMS = undefined;
 
 var _APIUtil = __webpack_require__(116);
 
@@ -26934,6 +26940,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 var FETCH_ALBUMS = exports.FETCH_ALBUMS = 'FETCH_ALBUMS';
 var ADD_ALBUM = exports.ADD_ALBUM = 'ADD_ALBUM';
+var SHOW_ALBUM_SEARCH_BAR = exports.SHOW_ALBUM_SEARCH_BAR = 'SHOW_ALBUM_SEARCH_BAR';
 
 var receiveAlbums = function receiveAlbums(albums) {
   return {
@@ -26946,6 +26953,13 @@ var addAlbum = exports.addAlbum = function addAlbum(album) {
   return {
     type: ADD_ALBUM,
     album: album
+  };
+};
+
+var changeAlbumSearchState = exports.changeAlbumSearchState = function changeAlbumSearchState(value) {
+  return {
+    type: SHOW_ALBUM_SEARCH_BAR,
+    value: value
   };
 };
 
@@ -30182,12 +30196,14 @@ var UserAlbumList = function (_React$Component) {
 
       var _props = this.props,
           albums = _props.albums,
-          userAlbumIds = _props.userAlbumIds;
+          userAlbumIds = _props.userAlbumIds,
+          showAlbumSearch = _props.showAlbumSearch;
 
       var albumIds = userAlbumIds.slice(0, this.state.loadCounter * 3);
       return _react2.default.createElement(
         'div',
         { className: 'user-library' },
+        _react2.default.createElement('div', { className: '' + (showAlbumSearch ? "show-search" : "hide-search") }),
         _react2.default.createElement(
           'div',
           { className: 'user-library-container' },
@@ -30233,7 +30249,8 @@ var mapStateToProps = function mapStateToProps(state) {
       albums = _state$userAlbums.albums,
       userAlbumIds = _state$userAlbums.userAlbumIds;
 
-  return { albums: albums, userAlbumIds: userAlbumIds };
+  var showAlbumSearch = state.showAlbumSearch;
+  return { albums: albums, userAlbumIds: userAlbumIds, showAlbumSearch: showAlbumSearch };
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps)(UserAlbumList);
@@ -30308,6 +30325,33 @@ var UserAlbumItem = function UserAlbumItem(_ref) {
 };
 
 exports.default = UserAlbumItem;
+
+/***/ }),
+/* 222 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _actions = __webpack_require__(115);
+
+var SearchBarState = function SearchBarState() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+  var action = arguments[1];
+
+  switch (action.type) {
+    case _actions.SHOW_ALBUM_SEARCH_BAR:
+      return action.value;
+    default:
+      return state;
+  }
+};
+
+exports.default = SearchBarState;
 
 /***/ })
 /******/ ]);

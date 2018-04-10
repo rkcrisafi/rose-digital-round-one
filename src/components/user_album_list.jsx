@@ -15,10 +15,11 @@ class UserAlbumList extends React.Component {
   }
 
   render() {
-    const { albums, userAlbumIds } = this.props;
+    const { albums, userAlbumIds, showAlbumSearch } = this.props;
     let albumIds = userAlbumIds.slice(0,this.state.loadCounter * 3);
     return (
       <div className="user-library">
+        <div className={`${showAlbumSearch ? "show-search" : "hide-search"}`}></div>
         <div className="user-library-container">
           { userAlbumIds.length === 0 ? null :
             <div>
@@ -47,7 +48,8 @@ class UserAlbumList extends React.Component {
 
 const mapStateToProps = state => {
   const { albums, userAlbumIds } = state.userAlbums;
-  return { albums, userAlbumIds };
+  let showAlbumSearch = state.showAlbumSearch;
+  return { albums, userAlbumIds, showAlbumSearch };
 };
 
 export default connect(

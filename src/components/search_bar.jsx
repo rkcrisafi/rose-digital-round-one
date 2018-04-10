@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchAlbums, addAlbum } from '../actions/actions';
+import { fetchAlbums, addAlbum, changeAlbumSearchState } from '../actions/actions';
 import AlbumItem from './album_item';
 
 class SearchBar extends React.Component {
@@ -12,11 +12,7 @@ class SearchBar extends React.Component {
   }
 
   handleClick() {
-
-  }
-
-  handlePlusClick() {
-
+    this.props.changeAlbumSearchState(!this.props.showAlbumSearch);
   }
 
   render() {
@@ -25,12 +21,12 @@ class SearchBar extends React.Component {
       <div className="search-albums">
         <div className="navbar-container">
           <div
-            onClick={() => this.handlePlusClick()}
+            onClick={() => this.handleClick()}
             className="show-search-albums-button">
             <i className="fas fa-plus-circle"></i>
           </div>
         </div>
-        <div className="search-bar-container">
+        <div className={`search-bar-container ${!this.props.showAlbumSearch ? "hide-search-bar" : ""}`}>
           <form
             onSubmit={(e) => this.handleSubmit(e)}
             className="search-bar-form">
@@ -61,9 +57,11 @@ class SearchBar extends React.Component {
 const mapStateToProps = state => {
   let albums = !state.albums.results ? [] : Object.keys(state.albums.results).map(id => state.albums.results[id]);
   let userAlbums = state.userAlbums;
+  let showAlbumSearch = state.showAlbumSearch;
   return ({
     albums,
-    userAlbums
+    userAlbums,
+    showAlbumSearch
   });
 };
 
@@ -71,5 +69,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchAlbums, addAlbum }
+  { fetchAlbums, addAlbum, changeAlbumSearchState }
 )(SearchBar);
