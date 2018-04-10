@@ -165,6 +165,7 @@ body {
   margin: 10px;
 }
 
-.load-more-button:hover {
+.load-more-button:hover, .done-button:hover {
   background-color: #8b251d;
+  cursor: pointer;
 }
