@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchAlbums } from '../actions/actions';
+import { fetchAlbums, addAlbum } from '../actions/actions';
 import AlbumItem from './album_item';
 
 class SearchBar extends React.Component {
@@ -11,7 +11,12 @@ class SearchBar extends React.Component {
     this.props.fetchAlbums(query);
   }
 
+  handleClick() {
+
+  }
+
   render() {
+    const { albums, addAlbum, userAlbums } = this.props;
     return (
       <div className="search-bar-container">
         <form
@@ -24,9 +29,16 @@ class SearchBar extends React.Component {
         </form>
 
         <div className="searched-albums-container">
-          { this.props.albums.map((album, idx) => {
-            return <AlbumItem key={idx} album={album}/>;
+          { albums.map((album, idx) => {
+            return <AlbumItem key={idx} album={album} addAlbum={addAlbum} userAlbums={userAlbums}/>;
           })}
+        </div>
+        <div>
+          <button
+            className="done-button"
+            onClick={() => this.handleClick()}>
+            Done
+          </button>
         </div>
       </div>
     );
@@ -35,8 +47,10 @@ class SearchBar extends React.Component {
 
 const mapStateToProps = state => {
   let albums = !state.albums.results ? [] : Object.keys(state.albums.results).map(id => state.albums.results[id]);
+  let userAlbums = state.userAlbums;
   return ({
     albums,
+    userAlbums
   });
 };
 
@@ -44,5 +58,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchAlbums }
+  { fetchAlbums, addAlbum }
 )(SearchBar);

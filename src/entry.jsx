@@ -4,6 +4,7 @@ import { Route, HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import configureStore from './store';
 import SearchBar from './components/search_bar';
+import UserAlbumList from './components/user_album_list';
 
 const store = configureStore();
 
@@ -11,6 +12,7 @@ const App = () => {
   return (
     <div>
       <SearchBar />
+      <UserAlbumList />
     </div>
   );
 };

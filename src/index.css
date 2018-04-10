@@ -9,10 +9,19 @@ body {
   margin: auto;
 }
 
+.user-library-container {
+  width: 50%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 :root {
   --padding: 10px;
   --padding2: 20px;
 }
+
 .search-bar-form input {
   padding-left: var(--padding);
   height: 40px;
@@ -31,10 +40,8 @@ body {
   justify-content: center;
 }
 
-
-
 @media screen and (max-width: 48em) {
-  .search-bar-container {
+  .search-bar-container, .user-library-container {
     width: calc(100% - 2*var(--padding2));
     padding: 0 20px;
   }
@@ -42,7 +49,13 @@ body {
 
 .searched-album {
   display: grid;
-  grid-template-columns: 3fr 4fr 1fr;
+  grid-template-columns: 6fr 10fr 1fr;
+  padding: 10px;
+}
+
+.library-albums {
+  display: grid;
+  grid-template-columns: 6fr 11fr;
   padding: 10px;
 }
 
@@ -55,18 +68,56 @@ body {
 }
 
 .album-info-line {
-  font-weight: 700;
+  font-weight: 600;
   color: #777;
   margin-top: 10px;
+  display: flex;
+}
+
+.album-info {
+  font-weight: 200;
+  margin-left: 10px;
 }
 
 .add-album-icon {
-  font-size: 25px;
   display: flex;
   align-items: center;
-  color: #777;
+  justify-content: center;
+}
+
+.add-album-icon button {
+  border: none;
+  cursor: pointer;
 }
 
 .fa-plus-circle {
-  cursor: pointer;
+  font-size: 25px;
+}
+
+.red:hover {
+  color: #8b251d;
+}
+
+.library-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #777;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 1px;
+  margin: 50px 0 10px 0;
+}
+
+.load-more-button, .done-button {
+  width: 150px;
+  height: 40px;
+  font-weight: 700;
+  font-size: 18px;
+  background-color: black;
+  color: white;
+  margin: 10px;
+}
+
+.load-more-button:hover {
+  background-color: #8b251d;
 }
