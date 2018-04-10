@@ -26801,6 +26801,9 @@ var SearchBar = function (_React$Component) {
     key: 'handleClick',
     value: function handleClick() {}
   }, {
+    key: 'handlePlusClick',
+    value: function handlePlusClick() {}
+  }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
@@ -26812,39 +26815,56 @@ var SearchBar = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'search-bar-container' },
-        _react2.default.createElement(
-          'form',
-          {
-            onSubmit: function onSubmit(e) {
-              return _this2.handleSubmit(e);
-            },
-            className: 'search-bar-form' },
-          _react2.default.createElement('input', {
-            type: 'text',
-            ref: function ref(input) {
-              return _this2.input = input;
-            },
-            placeholder: 'Search...' })
-        ),
+        { className: 'search-albums' },
         _react2.default.createElement(
           'div',
-          { className: 'searched-albums-container' },
-          albums.map(function (album, idx) {
-            return _react2.default.createElement(_album_item2.default, { key: idx, album: album, addAlbum: addAlbum, userAlbums: userAlbums });
-          })
-        ),
-        _react2.default.createElement(
-          'div',
-          null,
+          { className: 'navbar-container' },
           _react2.default.createElement(
-            'button',
+            'div',
             {
-              className: 'done-button',
               onClick: function onClick() {
-                return _this2.handleClick();
-              } },
-            'Done'
+                return _this2.handlePlusClick();
+              },
+              className: 'show-search-albums-button' },
+            _react2.default.createElement('i', { className: 'fas fa-plus-circle' })
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'search-bar-container' },
+          _react2.default.createElement(
+            'form',
+            {
+              onSubmit: function onSubmit(e) {
+                return _this2.handleSubmit(e);
+              },
+              className: 'search-bar-form' },
+            _react2.default.createElement('input', {
+              type: 'text',
+              ref: function ref(input) {
+                return _this2.input = input;
+              },
+              placeholder: 'Search...' })
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'searched-albums-container' },
+            albums.map(function (album, idx) {
+              return _react2.default.createElement(_album_item2.default, { key: idx, album: album, addAlbum: addAlbum, userAlbums: userAlbums });
+            })
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'button',
+              {
+                className: 'done-button',
+                onClick: function onClick() {
+                  return _this2.handleClick();
+                } },
+              'Done'
+            )
           )
         )
       );
@@ -30167,33 +30187,37 @@ var UserAlbumList = function (_React$Component) {
       var albumIds = userAlbumIds.slice(0, this.state.loadCounter * 3);
       return _react2.default.createElement(
         'div',
-        { className: 'user-library-container' },
-        userAlbumIds.length === 0 ? null : _react2.default.createElement(
+        { className: 'user-library' },
+        _react2.default.createElement(
           'div',
-          null,
-          _react2.default.createElement(
-            'div',
-            { className: 'library-title' },
-            'Miles\u2019s Melodious Music Miscellany'
-          ),
-          _react2.default.createElement(
-            'div',
-            null,
-            albumIds.map(function (id, idx) {
-              return _react2.default.createElement(_user_album_item2.default, { key: idx, album: albums[id] });
-            })
-          ),
-          this.state.loadCounter * 3 > userAlbumIds.length ? null : _react2.default.createElement(
+          { className: 'user-library-container' },
+          userAlbumIds.length === 0 ? null : _react2.default.createElement(
             'div',
             null,
             _react2.default.createElement(
-              'button',
-              {
-                className: 'load-more-button',
-                onClick: function onClick() {
-                  return _this2.handleClick();
-                } },
-              'Load More'
+              'div',
+              { className: 'library-title' },
+              'Miles\u2019s Melodious Music Miscellany'
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              albumIds.map(function (id, idx) {
+                return _react2.default.createElement(_user_album_item2.default, { key: idx, album: albums[id] });
+              })
+            ),
+            this.state.loadCounter * 3 >= userAlbumIds.length ? null : _react2.default.createElement(
+              'div',
+              null,
+              _react2.default.createElement(
+                'button',
+                {
+                  className: 'load-more-button',
+                  onClick: function onClick() {
+                    return _this2.handleClick();
+                  } },
+                'Load More'
+              )
             )
           )
         )

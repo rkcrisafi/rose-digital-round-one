@@ -18,26 +18,28 @@ class UserAlbumList extends React.Component {
     const { albums, userAlbumIds } = this.props;
     let albumIds = userAlbumIds.slice(0,this.state.loadCounter * 3);
     return (
-      <div className="user-library-container">
+      <div className="user-library">
+        <div className="user-library-container">
           { userAlbumIds.length === 0 ? null :
-          <div>
-            <div className="library-title">Miles’s Melodious Music Miscellany</div>
             <div>
-              { albumIds.map((id, idx) => {
-                return <UserAlbumItem key={idx} album={albums[id]}/>;
-              })}
-            </div>
-            { this.state.loadCounter * 3 > userAlbumIds.length ? null :
+              <div className="library-title">Miles’s Melodious Music Miscellany</div>
               <div>
-                <button
-                  className="load-more-button"
-                  onClick={() => this.handleClick()}>
-                  Load More
-                </button>
+                { albumIds.map((id, idx) => {
+                  return <UserAlbumItem key={idx} album={albums[id]}/>;
+                })}
               </div>
-             }
-          </div>
+              { this.state.loadCounter * 3 >= userAlbumIds.length ? null :
+                <div>
+                  <button
+                    className="load-more-button"
+                    onClick={() => this.handleClick()}>
+                    Load More
+                  </button>
+                </div>
+              }
+            </div>
           }
+        </div>
       </div>
     );
   }

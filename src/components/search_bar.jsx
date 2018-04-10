@@ -15,30 +15,43 @@ class SearchBar extends React.Component {
 
   }
 
+  handlePlusClick() {
+
+  }
+
   render() {
     const { albums, addAlbum, userAlbums } = this.props;
     return (
-      <div className="search-bar-container">
-        <form
-          onSubmit={(e) => this.handleSubmit(e)}
-          className="search-bar-form">
-          <input
-            type="text"
-            ref={input => this.input = input}
-            placeholder="Search..."/>
-        </form>
-
-        <div className="searched-albums-container">
-          { albums.map((album, idx) => {
-            return <AlbumItem key={idx} album={album} addAlbum={addAlbum} userAlbums={userAlbums}/>;
-          })}
+      <div className="search-albums">
+        <div className="navbar-container">
+          <div
+            onClick={() => this.handlePlusClick()}
+            className="show-search-albums-button">
+            <i className="fas fa-plus-circle"></i>
+          </div>
         </div>
-        <div>
-          <button
-            className="done-button"
-            onClick={() => this.handleClick()}>
-            Done
-          </button>
+        <div className="search-bar-container">
+          <form
+            onSubmit={(e) => this.handleSubmit(e)}
+            className="search-bar-form">
+            <input
+              type="text"
+              ref={input => this.input = input}
+              placeholder="Search..."/>
+          </form>
+
+          <div className="searched-albums-container">
+            { albums.map((album, idx) => {
+              return <AlbumItem key={idx} album={album} addAlbum={addAlbum} userAlbums={userAlbums}/>;
+            })}
+          </div>
+          <div>
+            <button
+              className="done-button"
+              onClick={() => this.handleClick()}>
+              Done
+            </button>
+          </div>
         </div>
       </div>
     );
