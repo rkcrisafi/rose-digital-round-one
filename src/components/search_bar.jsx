@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchAlbums, addAlbum, changeAlbumSearchState } from '../actions/actions';
+import { fetchAlbums, addAlbum, changeAlbumSearchState, clearSearchedAlbums } from '../actions/actions';
 import AlbumItem from './album_item';
 
 class SearchBar extends React.Component {
@@ -24,19 +24,19 @@ class SearchBar extends React.Component {
 
   handleDoneClick() {
     this.props.changeAlbumSearchState(!this.props.albumSearchState, 'none');
+    this.props.clearSearchedAlbums();
   }
 
   render() {
     const { albums, addAlbum, userAlbums, albumSearchState } = this.props;
     let buttonClass = albumSearchState.size === 'mini-searchbar-albums' && albums.length === 3 ? 'mini' : '';
-    console.log(albumSearchState.size, albums.length);
     return (
       <div className={`search-albums ${buttonClass}`}>
         <div className="navbar-container">
           <div
             onClick={() => this.handleClick(albumSearchState.size)}
             className="show-search-albums-button">
-            <i className="fas fa-plus-circle"></i>
+            <i className={`fas fa-${albumSearchState.show ? 'minus' : 'plus'}-circle`}></i>
           </div>
         </div>
         <div className={`search-bar-container ${!albumSearchState.show ? "hide-search-bar" : ""}`}>
@@ -87,5 +87,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { fetchAlbums, addAlbum, changeAlbumSearchState }
+  { fetchAlbums, addAlbum, changeAlbumSearchState, clearSearchedAlbums }
 )(SearchBar);

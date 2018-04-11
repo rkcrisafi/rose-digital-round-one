@@ -144,7 +144,7 @@ body {
 
 .library-albums {
   display: grid;
-  grid-template-columns: 3fr 13fr;
+  grid-template-columns: 3fr 12fr 1fr;
   padding: 10px;
 }
 
@@ -181,6 +181,9 @@ body {
 .album-info-line.mini {
   font-size: 10px;
   margin-bottom: 5px;
+}
+
+.album-info-line, .album-info-line.mini {
   transition-property: font-size, margin-bottom;
   transition-duration: 0.5s;
   transition-timing-function: ease-out;
@@ -202,8 +205,8 @@ body {
   cursor: pointer;
 }
 
-.fa-plus-circle {
-  font-size: 25px;
+.fa-plus-circle, .fa-minus-circle {
+  font-size: 20px;
 }
 
 .red:hover {
@@ -235,6 +238,9 @@ body {
   height: 20px;
   font-size: 10px;
   margin: 0 10px 10px 0;
+}
+
+.done-button, .done-button.mini {
   transition-property: width, height, font-size, margin;
   transition-duration: 0.5s;
   transition-timing-function: ease-out;
@@ -242,5 +248,10 @@ body {
 
 .load-more-button:hover, .done-button:hover {
   background-color: #8b251d;
+  cursor: pointer;
+}
+
+.remove-album-button:hover {
+  color: #8b251d;
   cursor: pointer;
 }

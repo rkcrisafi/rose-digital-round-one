@@ -26822,6 +26822,7 @@ var SearchBar = function (_React$Component) {
     key: 'handleDoneClick',
     value: function handleDoneClick() {
       this.props.changeAlbumSearchState(!this.props.albumSearchState, 'none');
+      this.props.clearSearchedAlbums();
     }
   }, {
     key: 'render',
@@ -26835,7 +26836,6 @@ var SearchBar = function (_React$Component) {
           albumSearchState = _props2.albumSearchState;
 
       var buttonClass = albumSearchState.size === 'mini-searchbar-albums' && albums.length === 3 ? 'mini' : '';
-      console.log(albumSearchState.size, albums.length);
       return _react2.default.createElement(
         'div',
         { className: 'search-albums ' + buttonClass },
@@ -26849,7 +26849,7 @@ var SearchBar = function (_React$Component) {
                 return _this2.handleClick(albumSearchState.size);
               },
               className: 'show-search-albums-button' },
-            _react2.default.createElement('i', { className: 'fas fa-plus-circle' })
+            _react2.default.createElement('i', { className: 'fas fa-' + (albumSearchState.show ? 'minus' : 'plus') + '-circle' })
           )
         ),
         _react2.default.createElement(
@@ -26915,7 +26915,7 @@ var mapStateToProps = function mapStateToProps(state) {
   };
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchAlbums: _actions.fetchAlbums, addAlbum: _actions.addAlbum, changeAlbumSearchState: _actions.changeAlbumSearchState })(SearchBar);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, { fetchAlbums: _actions.fetchAlbums, addAlbum: _actions.addAlbum, changeAlbumSearchState: _actions.changeAlbumSearchState, clearSearchedAlbums: _actions.clearSearchedAlbums })(SearchBar);
 
 /***/ }),
 /* 114 */
@@ -26937,10 +26937,8 @@ var AlbumReducer = function AlbumReducer() {
   switch (action.type) {
     case _actions.FETCH_ALBUMS:
       return action.albums;
-    case _actions.SHOW_ALBUM_SEARCH_BAR:
-      if (action.payload.size === 'none') {
-        return {};
-      }
+    case _actions.CLEAR_SEARCHED_ALBUMS:
+      return {};
     default:
       return state;
   }
@@ -26958,7 +26956,7 @@ exports.default = AlbumReducer;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchAlbums = exports.changeAlbumSearchState = exports.addAlbum = exports.SHOW_ALBUM_SEARCH_BAR = exports.ADD_ALBUM = exports.FETCH_ALBUMS = undefined;
+exports.fetchAlbums = exports.removeAlbum = exports.clearSearchedAlbums = exports.changeAlbumSearchState = exports.addAlbum = exports.REMOVE_ALBUM = exports.CLEAR_SEARCHED_ALBUMS = exports.SHOW_ALBUM_SEARCH_BAR = exports.ADD_ALBUM = exports.FETCH_ALBUMS = undefined;
 
 var _APIUtil = __webpack_require__(116);
 
@@ -26969,6 +26967,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 var FETCH_ALBUMS = exports.FETCH_ALBUMS = 'FETCH_ALBUMS';
 var ADD_ALBUM = exports.ADD_ALBUM = 'ADD_ALBUM';
 var SHOW_ALBUM_SEARCH_BAR = exports.SHOW_ALBUM_SEARCH_BAR = 'SHOW_ALBUM_SEARCH_BAR';
+var CLEAR_SEARCHED_ALBUMS = exports.CLEAR_SEARCHED_ALBUMS = 'CLEAR_SEARCHED_ALBUMS';
+var REMOVE_ALBUM = exports.REMOVE_ALBUM = 'REMOVE_ALBUM';
 
 var receiveAlbums = function receiveAlbums(albums) {
   return {
@@ -26988,6 +26988,19 @@ var changeAlbumSearchState = exports.changeAlbumSearchState = function changeAlb
   return {
     type: SHOW_ALBUM_SEARCH_BAR,
     payload: { show: show, size: size }
+  };
+};
+
+var clearSearchedAlbums = exports.clearSearchedAlbums = function clearSearchedAlbums() {
+  return {
+    type: CLEAR_SEARCHED_ALBUMS
+  };
+};
+
+var removeAlbum = exports.removeAlbum = function removeAlbum(id) {
+  return {
+    type: REMOVE_ALBUM,
+    id: id
   };
 };
 
@@ -30163,6 +30176,11 @@ var UserAlbumReducer = function UserAlbumReducer() {
       newState.userAlbumIds.unshift(action.album.collectionId);
       newState.albums[action.album.collectionId] = action.album;
       return newState;
+    case _actions.REMOVE_ALBUM:
+      var index = newState.userAlbumIds.indexOf(action.id);
+      newState.userAlbumIds.splice(index, 1);
+      delete newState.albums[action.id];
+      return newState;
     default:
       return state;
   }
@@ -30229,8 +30247,6 @@ var UserAlbumList = function (_React$Component) {
   }, {
     key: 'handleScroll',
     value: function handleScroll(event) {
-      console.log(window.scrollY);
-
       var _props = this.props,
           changeAlbumSearchState = _props.changeAlbumSearchState,
           albumSearchState = _props.albumSearchState,
@@ -30255,7 +30271,8 @@ var UserAlbumList = function (_React$Component) {
       var _props2 = this.props,
           albums = _props2.albums,
           userAlbumIds = _props2.userAlbumIds,
-          albumSearchState = _props2.albumSearchState;
+          albumSearchState = _props2.albumSearchState,
+          removeAlbum = _props2.removeAlbum;
 
       var albumIds = userAlbumIds.slice(0, this.state.loadCounter * 3);
       return _react2.default.createElement(
@@ -30279,7 +30296,7 @@ var UserAlbumList = function (_React$Component) {
                   return _this2.userLibrary = _ref;
                 } },
               albumIds.map(function (id, idx) {
-                return _react2.default.createElement(_user_album_item2.default, { key: idx, album: albums[id] });
+                return _react2.default.createElement(_user_album_item2.default, { key: idx, album: albums[id], removeAlbum: removeAlbum });
               })
             ),
             this.state.loadCounter * 3 >= userAlbumIds.length ? null : _react2.default.createElement(
@@ -30314,7 +30331,7 @@ var mapStateToProps = function mapStateToProps(state) {
   return { albums: albums, userAlbumIds: userAlbumIds, albumSearchState: albumSearchState, numberFoundAlbums: numberFoundAlbums };
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps, { changeAlbumSearchState: _actions.changeAlbumSearchState })(UserAlbumList);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, { changeAlbumSearchState: _actions.changeAlbumSearchState, removeAlbum: _actions.removeAlbum })(UserAlbumList);
 
 /***/ }),
 /* 221 */
@@ -30334,8 +30351,14 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var UserAlbumItem = function UserAlbumItem(_ref) {
-  var album = _ref.album;
+  var album = _ref.album,
+      removeAlbum = _ref.removeAlbum;
 
+  album, removeAlbum;
+
+  var handleClick = function handleClick() {
+    removeAlbum(album.collectionId);
+  };
 
   var covUrl = album.artworkUrl100.split('100').join('300');
   return _react2.default.createElement(
@@ -30380,6 +30403,19 @@ var UserAlbumItem = function UserAlbumItem(_ref) {
           { className: 'album-info' },
           album.releaseDate.slice(0, 4)
         )
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+        'div',
+        {
+          onClick: function onClick() {
+            return handleClick();
+          },
+          className: 'remove-album-button' },
+        _react2.default.createElement('i', { className: 'fas fa-trash-alt' })
       )
     )
   );

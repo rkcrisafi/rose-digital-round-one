@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { changeAlbumSearchState } from '../actions/actions';
+import { changeAlbumSearchState, removeAlbum } from '../actions/actions';
 import UserAlbumItem from './user_album_item';
 
 class UserAlbumList extends React.Component {
@@ -20,8 +20,7 @@ class UserAlbumList extends React.Component {
   }
 
   handleScroll(event) {
-      console.log(window.scrollY);
-      
+
       const { changeAlbumSearchState, albumSearchState, numberFoundAlbums } = this.props;
       if (albumSearchState.show && numberFoundAlbums > 1) {
         let size = window.scrollY <= 20 ? 'searchbar-albums' : 'mini-searchbar-albums';
@@ -36,7 +35,7 @@ class UserAlbumList extends React.Component {
   }
 
   render() {
-    const { albums, userAlbumIds, albumSearchState } = this.props;
+    const { albums, userAlbumIds, albumSearchState, removeAlbum } = this.props;
     let albumIds = userAlbumIds.slice(0,this.state.loadCounter * 3);
     return (
       <div className="user-library">
@@ -47,7 +46,7 @@ class UserAlbumList extends React.Component {
               <div className="library-title">Miles’s Melodious Music Miscellany</div>
               <div ref={ref => this.userLibrary = ref}>
                 { albumIds.map((id, idx) => {
-                  return <UserAlbumItem key={idx} album={albums[id]}/>;
+                  return <UserAlbumItem key={idx} album={albums[id]} removeAlbum={removeAlbum}/>;
                 })}
               </div>
               { this.state.loadCounter * 3 >= userAlbumIds.length ? null :
@@ -76,5 +75,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { changeAlbumSearchState }
+  { changeAlbumSearchState, removeAlbum }
 )(UserAlbumList);

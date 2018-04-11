@@ -1,5 +1,5 @@
 import merge from 'lodash/merge';
-import { ADD_ALBUM } from '../actions/actions';
+import { ADD_ALBUM, REMOVE_ALBUM } from '../actions/actions';
 
 let initialState = {
   userAlbumIds: [],
@@ -12,6 +12,11 @@ const UserAlbumReducer = (state = initialState, action) => {
     case ADD_ALBUM:
       newState.userAlbumIds.unshift(action.album.collectionId);
       newState.albums[action.album.collectionId] = action.album;
+      return newState;
+    case REMOVE_ALBUM:
+      let index = newState.userAlbumIds.indexOf(action.id);
+      newState.userAlbumIds.splice(index, 1);
+      delete newState.albums[action.id];
       return newState;
     default:
       return state;

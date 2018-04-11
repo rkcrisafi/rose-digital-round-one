@@ -1,14 +1,12 @@
-import { FETCH_ALBUMS, SHOW_ALBUM_SEARCH_BAR } from '../actions/actions';
+import { FETCH_ALBUMS, SHOW_ALBUM_SEARCH_BAR, CLEAR_SEARCHED_ALBUMS } from '../actions/actions';
 
 
 const AlbumReducer = (state = {}, action) => {
   switch (action.type) {
     case FETCH_ALBUMS:
       return action.albums;
-    case SHOW_ALBUM_SEARCH_BAR:
-      if (action.payload.size === 'none') {
-        return {};
-      }
+    case CLEAR_SEARCHED_ALBUMS:
+      return {};
     default:
       return state;
   }
