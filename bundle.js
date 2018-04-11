@@ -27076,7 +27076,7 @@ var AlbumItem = function AlbumItem(_ref) {
     ),
     _react2.default.createElement(
       'div',
-      { className: 'searched-album-info' },
+      { className: 'searched-album-info ' + className },
       _react2.default.createElement(
         'div',
         { className: 'album-info-line ' + className },

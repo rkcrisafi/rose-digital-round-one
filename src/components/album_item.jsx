@@ -21,7 +21,7 @@ const AlbumItem = ({ album, addAlbum, userAlbums, albumSearchState }) => {
       <div className={`searched-album-cover ${className}`}>
         <img src={covUrl}></img>
       </div>
-      <div className="searched-album-info">
+      <div className={`searched-album-info ${className}`}>
         <div className={`album-info-line ${className}`}>
           Album:{'  '}<div className="album-info">{album.collectionName}</div>
         </div>

@@ -135,29 +135,22 @@ body {
   padding: 5px;
 }
 
-.searched-album.mini {
-  grid-template-columns: 2fr 12fr 2fr;
-  transition-property: grid-template-columns;
-  transition-duration: 0.5s;
-  transition-timing-function: ease-in-out;
-}
-
 .library-albums {
   display: grid;
   grid-template-columns: 3fr 12fr 1fr;
   padding: 10px;
 }
 
-.searched-album-cover img{
+.searched-album-cover img {
   width: 100%;
   min-width: 70px;
 }
 
-.mini img {
+.searched-album-cover.mini img {
   width: 70px;
 }
 
-.searched-album-cover img, .mini img {
+.searched-album-cover img, .searched-album-cover.mini img {
   transition-property: width;
   transition-duration: 0.5s;
   transition-timing-function: ease-out;
