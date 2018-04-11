@@ -26108,7 +26108,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = (0, _redux.combineReducers)({
   albums: _album_reducer2.default,
   userAlbums: _user_album_reducer2.default,
-  showAlbumSearch: _search_bar_state_reducer2.default
+  albumSearchState: _search_bar_state_reducer2.default
 });
 
 /***/ }),
@@ -26801,25 +26801,44 @@ var SearchBar = function (_React$Component) {
       e.preventDefault();
       var query = this.input.value.split(' ').join('+');
       this.props.fetchAlbums(query);
+      this.props.changeAlbumSearchState(this.props.albumSearchState.show, 'searchbar-albums');
     }
   }, {
     key: 'handleClick',
-    value: function handleClick() {
-      this.props.changeAlbumSearchState(!this.props.showAlbumSearch);
+    value: function handleClick(size) {
+      var _props = this.props,
+          changeAlbumSearchState = _props.changeAlbumSearchState,
+          albumSearchState = _props.albumSearchState,
+          albums = _props.albums;
+
+      if (albumSearchState.show) {
+        changeAlbumSearchState(!albumSearchState.show, 'none');
+      } else {
+        var _size = albums.length === 0 ? 'searchbar-only' : 'searchbar-albums';
+        changeAlbumSearchState(!albumSearchState.show, _size);
+      }
+    }
+  }, {
+    key: 'handleDoneClick',
+    value: function handleDoneClick() {
+      this.props.changeAlbumSearchState(!this.props.albumSearchState, 'none');
     }
   }, {
     key: 'render',
     value: function render() {
       var _this2 = this;
 
-      var _props = this.props,
-          albums = _props.albums,
-          addAlbum = _props.addAlbum,
-          userAlbums = _props.userAlbums;
+      var _props2 = this.props,
+          albums = _props2.albums,
+          addAlbum = _props2.addAlbum,
+          userAlbums = _props2.userAlbums,
+          albumSearchState = _props2.albumSearchState;
 
+      var buttonClass = albumSearchState.size === 'mini-searchbar-albums' && albums.length === 3 ? 'mini' : '';
+      console.log(albumSearchState.size, albums.length);
       return _react2.default.createElement(
         'div',
-        { className: 'search-albums' },
+        { className: 'search-albums ' + buttonClass },
         _react2.default.createElement(
           'div',
           { className: 'navbar-container' },
@@ -26827,7 +26846,7 @@ var SearchBar = function (_React$Component) {
             'div',
             {
               onClick: function onClick() {
-                return _this2.handleClick();
+                return _this2.handleClick(albumSearchState.size);
               },
               className: 'show-search-albums-button' },
             _react2.default.createElement('i', { className: 'fas fa-plus-circle' })
@@ -26835,7 +26854,7 @@ var SearchBar = function (_React$Component) {
         ),
         _react2.default.createElement(
           'div',
-          { className: 'search-bar-container ' + (!this.props.showAlbumSearch ? "hide-search-bar" : "") },
+          { className: 'search-bar-container ' + (!albumSearchState.show ? "hide-search-bar" : "") },
           _react2.default.createElement(
             'form',
             {
@@ -26854,7 +26873,12 @@ var SearchBar = function (_React$Component) {
             'div',
             { className: 'searched-albums-container' },
             albums.map(function (album, idx) {
-              return _react2.default.createElement(_album_item2.default, { key: idx, album: album, addAlbum: addAlbum, userAlbums: userAlbums });
+              return _react2.default.createElement(_album_item2.default, {
+                key: idx,
+                album: album,
+                addAlbum: addAlbum,
+                userAlbums: userAlbums,
+                albumSearchState: albumSearchState });
             })
           ),
           _react2.default.createElement(
@@ -26863,9 +26887,9 @@ var SearchBar = function (_React$Component) {
             _react2.default.createElement(
               'button',
               {
-                className: 'done-button',
+                className: 'done-button ' + buttonClass,
                 onClick: function onClick() {
-                  return _this2.handleClick();
+                  return _this2.handleDoneClick();
                 } },
               'Done'
             )
@@ -26883,11 +26907,11 @@ var mapStateToProps = function mapStateToProps(state) {
     return state.albums.results[id];
   });
   var userAlbums = state.userAlbums;
-  var showAlbumSearch = state.showAlbumSearch;
+  var albumSearchState = state.albumSearchState;
   return {
     albums: albums,
     userAlbums: userAlbums,
-    showAlbumSearch: showAlbumSearch
+    albumSearchState: albumSearchState
   };
 };
 
@@ -26913,6 +26937,10 @@ var AlbumReducer = function AlbumReducer() {
   switch (action.type) {
     case _actions.FETCH_ALBUMS:
       return action.albums;
+    case _actions.SHOW_ALBUM_SEARCH_BAR:
+      if (action.payload.size === 'none') {
+        return {};
+      }
     default:
       return state;
   }
@@ -26956,10 +26984,10 @@ var addAlbum = exports.addAlbum = function addAlbum(album) {
   };
 };
 
-var changeAlbumSearchState = exports.changeAlbumSearchState = function changeAlbumSearchState(value) {
+var changeAlbumSearchState = exports.changeAlbumSearchState = function changeAlbumSearchState(show, size) {
   return {
     type: SHOW_ALBUM_SEARCH_BAR,
-    value: value
+    payload: { show: show, size: size }
   };
 };
 
@@ -27007,7 +27035,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var AlbumItem = function AlbumItem(_ref) {
   var album = _ref.album,
       addAlbum = _ref.addAlbum,
-      userAlbums = _ref.userAlbums;
+      userAlbums = _ref.userAlbums,
+      albumSearchState = _ref.albumSearchState;
 
   album, addAlbum, userAlbums;
 
@@ -27023,12 +27052,13 @@ var AlbumItem = function AlbumItem(_ref) {
   };
 
   var covUrl = album.artworkUrl100.split('100').join('300');
+  var className = albumSearchState.size === 'mini-searchbar-albums' ? 'mini' : '';
   return _react2.default.createElement(
     'div',
-    { className: 'searched-album' },
+    { className: 'searched-album ' + className },
     _react2.default.createElement(
       'div',
-      { className: 'searched-album-cover' },
+      { className: 'searched-album-cover ' + className },
       _react2.default.createElement('img', { src: covUrl })
     ),
     _react2.default.createElement(
@@ -27036,7 +27066,7 @@ var AlbumItem = function AlbumItem(_ref) {
       { className: 'searched-album-info' },
       _react2.default.createElement(
         'div',
-        { className: 'album-info-line' },
+        { className: 'album-info-line ' + className },
         'Album:',
         '  ',
         _react2.default.createElement(
@@ -27047,7 +27077,7 @@ var AlbumItem = function AlbumItem(_ref) {
       ),
       _react2.default.createElement(
         'div',
-        { className: 'album-info-line' },
+        { className: 'album-info-line ' + className },
         'Artist:',
         '  ',
         _react2.default.createElement(
@@ -27058,7 +27088,7 @@ var AlbumItem = function AlbumItem(_ref) {
       ),
       _react2.default.createElement(
         'div',
-        { className: 'album-info-line' },
+        { className: 'album-info-line ' + className },
         'Year: ',
         _react2.default.createElement(
           'div',
@@ -30159,6 +30189,8 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(103);
 
+var _actions = __webpack_require__(115);
+
 var _user_album_item = __webpack_require__(221);
 
 var _user_album_item2 = _interopRequireDefault(_user_album_item);
@@ -30180,10 +30212,36 @@ var UserAlbumList = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (UserAlbumList.__proto__ || Object.getPrototypeOf(UserAlbumList)).call(this, props));
 
     _this.state = { loadCounter: 1 };
+    _this.handleScroll = _this.handleScroll.bind(_this);
     return _this;
   }
 
   _createClass(UserAlbumList, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      window.addEventListener('scroll', this.handleScroll);
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      window.removeEventListener('scroll', this.handleScroll);
+    }
+  }, {
+    key: 'handleScroll',
+    value: function handleScroll(event) {
+      console.log(window.scrollY);
+
+      var _props = this.props,
+          changeAlbumSearchState = _props.changeAlbumSearchState,
+          albumSearchState = _props.albumSearchState,
+          numberFoundAlbums = _props.numberFoundAlbums;
+
+      if (albumSearchState.show && numberFoundAlbums > 1) {
+        var size = window.scrollY <= 20 ? 'searchbar-albums' : 'mini-searchbar-albums';
+        changeAlbumSearchState(albumSearchState.show, size);
+      }
+    }
+  }, {
     key: 'handleClick',
     value: function handleClick() {
       var loadCounter = this.state.loadCounter + 1;
@@ -30194,16 +30252,16 @@ var UserAlbumList = function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      var _props = this.props,
-          albums = _props.albums,
-          userAlbumIds = _props.userAlbumIds,
-          showAlbumSearch = _props.showAlbumSearch;
+      var _props2 = this.props,
+          albums = _props2.albums,
+          userAlbumIds = _props2.userAlbumIds,
+          albumSearchState = _props2.albumSearchState;
 
       var albumIds = userAlbumIds.slice(0, this.state.loadCounter * 3);
       return _react2.default.createElement(
         'div',
         { className: 'user-library' },
-        _react2.default.createElement('div', { className: '' + (showAlbumSearch ? "show-search" : "hide-search") }),
+        _react2.default.createElement('div', { className: '' + albumSearchState.size }),
         _react2.default.createElement(
           'div',
           { className: 'user-library-container' },
@@ -30217,7 +30275,9 @@ var UserAlbumList = function (_React$Component) {
             ),
             _react2.default.createElement(
               'div',
-              null,
+              { ref: function ref(_ref) {
+                  return _this2.userLibrary = _ref;
+                } },
               albumIds.map(function (id, idx) {
                 return _react2.default.createElement(_user_album_item2.default, { key: idx, album: albums[id] });
               })
@@ -30249,11 +30309,12 @@ var mapStateToProps = function mapStateToProps(state) {
       albums = _state$userAlbums.albums,
       userAlbumIds = _state$userAlbums.userAlbumIds;
 
-  var showAlbumSearch = state.showAlbumSearch;
-  return { albums: albums, userAlbumIds: userAlbumIds, showAlbumSearch: showAlbumSearch };
+  var numberFoundAlbums = state.albums.resultCount;
+  var albumSearchState = state.albumSearchState;
+  return { albums: albums, userAlbumIds: userAlbumIds, albumSearchState: albumSearchState, numberFoundAlbums: numberFoundAlbums };
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(UserAlbumList);
+exports.default = (0, _reactRedux.connect)(mapStateToProps, { changeAlbumSearchState: _actions.changeAlbumSearchState })(UserAlbumList);
 
 /***/ }),
 /* 221 */
@@ -30339,13 +30400,14 @@ Object.defineProperty(exports, "__esModule", {
 
 var _actions = __webpack_require__(115);
 
+//SearchBarState size can be 'none', 'searchbar-only', 'mini-searchbar-albums', 'searchbar-albums'
 var SearchBarState = function SearchBarState() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { show: false, size: 'none' };
   var action = arguments[1];
 
   switch (action.type) {
     case _actions.SHOW_ALBUM_SEARCH_BAR:
-      return action.value;
+      return { show: action.payload.show, size: action.payload.size };
     default:
       return state;
   }

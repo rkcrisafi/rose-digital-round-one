@@ -6,5 +6,5 @@ import SearchBarState from './search_bar_state_reducer';
 export default combineReducers({
   albums: AlbumReducer,
   userAlbums: UserAlbumReducer,
-  showAlbumSearch: SearchBarState,
+  albumSearchState: SearchBarState,
 });

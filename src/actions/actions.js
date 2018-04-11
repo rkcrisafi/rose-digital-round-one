@@ -14,9 +14,9 @@ export const addAlbum = (album) => ({
   album
 });
 
-export const changeAlbumSearchState = (value) => ({
+export const changeAlbumSearchState = (show, size) => ({
   type: SHOW_ALBUM_SEARCH_BAR,
-  value
+  payload: { show, size }
 });
 
 export const fetchAlbums = (query) => dispatch => (

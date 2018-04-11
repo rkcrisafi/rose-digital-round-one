@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AlbumItem = ({ album, addAlbum, userAlbums }) => {
+const AlbumItem = ({ album, addAlbum, userAlbums, albumSearchState }) => {
   album, addAlbum, userAlbums;
 
   const handleClick = () => {
@@ -15,19 +15,20 @@ const AlbumItem = ({ album, addAlbum, userAlbums }) => {
   };
 
   let covUrl = album.artworkUrl100.split('100').join('300');
+  let className = albumSearchState.size === 'mini-searchbar-albums' ? 'mini' : '';
   return (
-    <div className="searched-album">
-      <div className="searched-album-cover">
+    <div className={`searched-album ${className}`}>
+      <div className={`searched-album-cover ${className}`}>
         <img src={covUrl}></img>
       </div>
       <div className="searched-album-info">
-        <div className="album-info-line">
+        <div className={`album-info-line ${className}`}>
           Album:{'  '}<div className="album-info">{album.collectionName}</div>
         </div>
-        <div className="album-info-line">Artist:{'  '}
+        <div className={`album-info-line ${className}`}>Artist:{'  '}
           <div className="album-info">{album.artistName}</div>
         </div>
-        <div className="album-info-line">
+        <div className={`album-info-line ${className}`}>
           Year: <div className="album-info">{album.releaseDate.slice(0,4)}</div>
         </div>
       </div>
